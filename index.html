@@ -1,15 +1,61 @@
-<html lang="ru">
-   <head>
-      <meta charset="UTF-8">
-      <title>HTML Document</title>
-   </head>
-   <body>
-<br>
-                var loginForm = new Form1();
-                loginForm.textBox1.Text = "login1";// Тестовое значение для входа
-                loginForm.textBox2.Text = "pass1";// Тестовое значение для входа
-                loginForm.button1Click(null, null);//"Нажатие" на кнопку
-                Assert.IsFalse(loginForm.Visible);
-     </br>
-   </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Versions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .code-container {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        select {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Switch Between Code Versions</h1>
+    <select id="codeSelector" onchange="switchCode()">
+        <option value="version1">Version 1</option>
+        <option value="version2">Version 2</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <div id="codeDisplay" class="code-container"></div>
+
+    <script>
+        const codeVersions = {
+            version1: `
+var loginForm = new Form1();
+loginForm.textBox1.Text = "login1"; // Тестовое значение для входа
+loginForm.textBox2.Text = "pass1"; // Тестовое значение для входа
+loginForm.button1Click(null, null); //"Нажатие" на кнопку
+Assert.IsFalse(loginForm.Visible);`,
+            version2: `
+var loginForm = new Form1();
+loginForm.textBox1.Text = "login2"; // Другое тестовое значение для входа
+loginForm.textBox2.Text = "pass2"; // Другое тестовое значение для входа
+loginForm.button1Click(null, null); //"Нажатие" на кнопку
+Assert.IsTrue(loginForm.Visible);`
+            // Add more versions as needed
+        };
+
+        function switchCode() {
+            const selectedVersion = document.getElementById('codeSelector').value;
+            document.getElementById('codeDisplay').innerText = codeVersions[selectedVersion];
+        }
+
+        // Initialize with the first version
+        switchCode();
+    </script>
+</body>
 </html>
