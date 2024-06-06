@@ -25,8 +25,25 @@
             cursor: pointer;
             padding: 5px 10px;
         }
+        .download-button {
+            margin-top: 10px;
+            background-color: #2d2d2d;
+            border: 1px solid #f8f8f2;
+            color: #f8f8f2;
+            cursor: pointer;
+            padding: 5px 10px;
+            display: none;
+        }
+        .file-input {
+            margin-top: 10px;
+        }
         select {
             margin-top: 20px;
+        }
+        .preview {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -39,6 +56,9 @@
     </select>
     <img id="codeImage" src="image1.jpg" alt="Code Image" style="display: block; margin-top: 20px;">
     <button class="copy-button" onclick="copyCode()">Copy All</button>
+    <button id="downloadButton" class="download-button" onclick="downloadFile()">Download</button>
+    <input type="file" id="fileInput" class="file-input" style="display:none;" onchange="previewFile()">
+    <div id="filePreview" class="preview" style="display:none;"></div>
     <div id="codeDisplay" class="code-container"></div>
 
     <script>
@@ -213,8 +233,8 @@ namespace gubar
     }
 }
 `,
-            version3: `Example`,
-            version4: `example`
+            version3: 'Word document content for version3',
+            version4: 'Word document content for version4'
         };
 
         const codeImages = {
@@ -226,6 +246,20 @@ namespace gubar
             const selectedVersion = document.getElementById('codeSelector').value;
             document.getElementById('codeDisplay').innerText = codeVersions[selectedVersion];
             document.getElementById('codeImage').src = codeImages[selectedVersion];
+
+            const downloadButton = document.getElementById('downloadButton');
+            const fileInput = document.getElementById('fileInput');
+            const filePreview = document.getElementById('filePreview');
+
+            if (selectedVersion === 'version3' || selectedVersion === 'version4') {
+                downloadButton.style.display = 'inline-block';
+                fileInput.style.display = 'block';
+                filePreview.style.display = 'block';
+            } else {
+                downloadButton.style.display = 'none';
+                fileInput.style.display = 'none';
+                filePreview.style.display = 'none';
+            }
         }
 
         function copyCode() {
@@ -244,6 +278,25 @@ namespace gubar
             }
 
             selection.removeAllRanges();
+        }
+
+        function downloadFile() {
+            const selectedVersion = document.getElementById('codeSelector').value;
+            const content = codeVersions[selectedVersion];
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${selectedVersion}.txt`;
+            link.click();
+        }
+
+        function previewFile() {
+            const file = document.getElementById('fileInput').files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('filePreview').innerText = e.target.result;
+            };
+            reader.readAsText(file);
         }
 
         switchCode();
