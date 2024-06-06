@@ -260,37 +260,32 @@ namespace gubar
         };
 
 function switchCode() {
-    const selectedVersion = document.getElementById('codeSelector').value;
-    const codeDisplay = document.getElementById('codeDisplay');
-    const downloadButton = document.getElementById('downloadButton');
-    const fileInput = document.getElementById('fileInput');
-    const filePreview = document.getElementById('filePreview');
+            const selectedVersion = document.getElementById('codeSelector').value;
+            const codeDisplay = document.getElementById('codeDisplay');
+            const downloadButton = document.getElementById('downloadButton');
+            const filePreview = document.getElementById('filePreview');
 
-    if (selectedVersion === 'version4') {
-        codeDisplay.innerHTML = codeVersions[selectedVersion].map(item => {
-            if (item.image) {
-                return `<img src="${item.image}" alt="Image" style="width: 100%; max-width: 300px; margin-top: 10px;">`;
+            if (selectedVersion === 'version4') {
+                filePreview.innerHTML = codeVersions[selectedVersion].map(item => {
+                    if (item.type === 'image') {
+                        return `<img src="${item.src}" alt="${item.name}" class="file-preview-img">`;
+                    } else if (item.type === 'pdf') {
+                        return `<a href="${item.src}" target="_blank">${item.name}</a>`;
+                    } else if (item.type === 'file') {
+                        return `<a href="#" onclick="downloadFile('${item.name}')">${item.name}</a>`;
+                    } else {
+                        return '';
+                    }
+                }).join('');
+                codeDisplay.innerText = '';
+                downloadButton.style.display = 'none';
+                filePreview.style.display = 'block';
             } else {
-                return `
-                    <div>
-                        ${item.name}
-                        <button onclick="downloadFile('${item.name}')">Download</button>
-                    </div>
-                `;
+                codeDisplay.innerText = codeVersions[selectedVersion];
+                downloadButton.style.display = 'inline-block';
+                filePreview.style.display = 'none';
             }
-        }).join('');
-        downloadButton.style.display = 'none';
-        fileInput.style.display = 'block';
-        filePreview.style.display = 'block';
-    } else {
-        codeDisplay.innerText = codeVersions[selectedVersion];
-        downloadButton.style.display = 'inline-block';
-        fileInput.style.display = 'none';
-        filePreview.style.display = 'none';
-    }
-}
-
-
+        }
 
         function copyCode() {
             const codeContainer = document.getElementById('codeDisplay');
@@ -310,23 +305,13 @@ function switchCode() {
             selection.removeAllRanges();
         }
 
-function downloadFile(fileName) {
-    const file = codeVersions.version4.find(f => f.name === fileName);
-    const blob = new Blob([file.content], { type: 'application/octet-stream' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = fileName;
-    link.click();
-}
-
-
-        function previewFile() {
-            const file = document.getElementById('fileInput').files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('filePreview').innerText = e.target.result;
-            };
-            reader.readAsText(file);
+        function downloadFile(fileName) {
+            const file = codeVersions.version4.find(f => f.name === fileName);
+            const blob = new Blob([file.content], { type: 'application/octet-stream' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
         }
 
         switchCode();
