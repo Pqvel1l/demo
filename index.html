@@ -51,6 +51,7 @@
         <option value="version3">UnitTests</option>
         <option value="version4">VSDX && WORD</option>
     </select>
+    <a href="https://demo.statuxia.tech/" align="right">Анонимус Чатиус</a>
     <button class="copy-button" onclick="copyCode()">Copy All</button>
     <button id="downloadButton" class="download-button" style="display: none;" onclick="downloadFile()">Download</button>
     <div id="filePreview" class="preview file-preview" style="display: none;"></div>
@@ -229,15 +230,20 @@ namespace gubar
 }
 `,
             version3: `
-                using gubar;
+using gubar; //изменить на своё проект после всех действий ниже
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+
 // Тыкаем на название проекта ПКМ, находим добавить, тыкаем "Создать проект", затем тыкаем Проект модульного теста (.NET Framework)
 // Название ставим любое. Затем, ебашим значится, зависимости, после создания отдельного проекта у нас в обозревателе решений.
 // Это можно сделать, нажав ПКМ на UnitTestProject1 (это название вашего проекта, по умолчанию оно такое.) и находим там "Зависимости"
 // И ставим там галочку для нашего проекта. Первый пункт окончен. 
 // Второй пункт. Нажимаем в нашем этом UnitTestProject1 на "Ссылки" и жмём "Добавить ссылки". Там в окне, нужно найти "Проекты" и доабвить наш проект в зависимость!!!
 // Так же, необходимо добавить ссылку System.Windows.Forms чтобы мы могли тестировать наши формы. Если вы всё сделали верно -  вы молодцы, если нет - анлак :)
+// Так же, необходимо не забыть изменить все необходимые поля и формы на PUBLIC в .Designer вашей формы.
 // А теперь смотрите, сверху есть вкладка "Тест" там жмякаете "Запустить все тесты"  и все тесты должны будут выполнится, если вы всё верно написали.
+
+
 namespace UnitTestProject1
 {
     [TestClass]
