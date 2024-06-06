@@ -1,4 +1,3 @@
-
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -16,6 +15,16 @@
             margin-top: 20px;
             white-space: pre;
             overflow-x: auto;
+            position: relative;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            color: #f8f8f2;
+            cursor: pointer;
         }
         select {
             margin-top: 20px;
@@ -23,8 +32,7 @@
     </style>
 </head>
 <body>
-    <h1>Уфф.. как я хочу сыр косичку :D</h1>
-    <select id="codeSelector" onchange="switchCode()">
+    Выбери форму или чет другое.. :<select id="codeSelector" onchange="switchCode()">
         <option value="version1">LoginForm</option>
         <option value="version2">RegisterForm</option>
         <option value="version3">Word?</option>
@@ -32,9 +40,9 @@
         <!-- Add more options as needed -->
     </select>
     <img id="codeImage" src="image1.jpg" alt="Code Image" style="display: block; margin-top: 20px;">
-    <div id="codeDisplay" class="code-container"></div>
-
-
+    <div id="codeDisplay" class="code-container">
+        <button class="copy-button" onclick="copyCode()">Copy All</button>
+    </div>
 
     <script>
         const codeVersions = {
@@ -236,6 +244,24 @@ namespace gubar
             const selectedVersion = document.getElementById('codeSelector').value;
             document.getElementById('codeDisplay').innerText = codeVersions[selectedVersion];
             document.getElementById('codeImage').src = codeImages[selectedVersion];
+        }
+
+        function copyCode() {
+            const codeContainer = document.getElementById('codeDisplay');
+            const range = document.createRange();
+            range.selectNodeContents(codeContainer);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            try {
+                document.execCommand('copy');
+                alert('Содержимое скопировано!');
+            } catch (err) {
+                alert('Не удалось скопировать содержимое');
+            }
+
+            selection.removeAllRanges();
         }
 
         // Initialize with the first version
