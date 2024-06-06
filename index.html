@@ -34,9 +34,7 @@
             padding: 5px 10px;
             display: none;
         }
-        .file-input {
-            margin-top: 10px;
-        }
+
         select {
             margin-top: 20px;
         }
@@ -52,13 +50,14 @@
         <option value="version1">LoginForm</option>
         <option value="version2">RegisterForm</option>
         <option value="version3">Word?</option>
-        <option value="version4">Word?</option>
+        <option value="version4">VSDX && WORD</option>
     </select>
     <img id="codeImage" src="image1.jpg" alt="Code Image" style="display: block; margin-top: 20px;">
     <button class="copy-button" onclick="copyCode()">Copy All</button>
-    <button id="downloadButton" class="download-button" onclick="downloadFile()">Download</button>
-    <input type="file" id="fileInput" class="file-input" style="display:none;" onchange="previewFile()">
-    <div id="filePreview" class="preview" style="display:none;"></div>
+<button id="downloadButton" class="download-button" style="display: none;" onclick="downloadFile()">Download</button>
+
+<div id="filePreview" class="preview" style="display: none;"></div>
+
     <div id="codeDisplay" class="code-container"></div>
 
     <script>
@@ -236,31 +235,62 @@ namespace gubar
             version3: 'Word document content for version3',
             version4: 'Word document content for version4'
         };
+        const codeVersions = {
+    // другие версии
+    version4: [
+        { name: 'functionSchema.vsdx', content: 'Схема функции' },
+        { name: 'ProgrammSchema.vsdx', content: 'Схема программы' },
+        { name: 'ERDiag.vsdx', content: 'ER-ДИАГРАММА' },
+        { name: 'ProgrammUpdateExamples.docx', content: 'Улучшение ПО' },
+        { name: 'AdminRukovod.docx', content: 'Улучшение ПО' },
+        { name: 'Specification.docx', content: 'Спецификация' },
+        { name: 'FIGURES_VISIO.png', content: 'Фигуры ВИЗИО' },
+        { name: 'FIGURES_VISIO2.png', content: 'Фигуры ВИЗИО 2' },
+        { name: 'GOST_VISIO.pdf', content: 'ГОСТ ВИЗИО' },
+        { name: 'PrimaryKEYS_VISIO.png', content: 'Установка ключей VISIO' }
+                
+        // добавьте другие файлы
+    ]
+};
+
 
         const codeImages = {
             version1: 'LoginForm.png',
             version2: 'RegisterForm.png'
         };
 
-        function switchCode() {
-            const selectedVersion = document.getElementById('codeSelector').value;
-            document.getElementById('codeDisplay').innerText = codeVersions[selectedVersion];
-            document.getElementById('codeImage').src = codeImages[selectedVersion];
+function switchCode() {
+    const selectedVersion = document.getElementById('codeSelector').value;
+    const codeDisplay = document.getElementById('codeDisplay');
+    const downloadButton = document.getElementById('downloadButton');
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
 
-            const downloadButton = document.getElementById('downloadButton');
-            const fileInput = document.getElementById('fileInput');
-            const filePreview = document.getElementById('filePreview');
-
-            if (selectedVersion === 'version3' || selectedVersion === 'version4') {
-                downloadButton.style.display = 'inline-block';
-                fileInput.style.display = 'block';
-                filePreview.style.display = 'block';
+    if (selectedVersion === 'version4') {
+        codeDisplay.innerHTML = codeVersions[selectedVersion].map(item => {
+            if (item.image) {
+                return `<img src="${item.image}" alt="Image" style="width: 100%; max-width: 300px; margin-top: 10px;">`;
             } else {
-                downloadButton.style.display = 'none';
-                fileInput.style.display = 'none';
-                filePreview.style.display = 'none';
+                return `
+                    <div>
+                        ${item.name}
+                        <button onclick="downloadFile('${item.name}')">Download</button>
+                    </div>
+                `;
             }
-        }
+        }).join('');
+        downloadButton.style.display = 'none';
+        fileInput.style.display = 'block';
+        filePreview.style.display = 'block';
+    } else {
+        codeDisplay.innerText = codeVersions[selectedVersion];
+        downloadButton.style.display = 'inline-block';
+        fileInput.style.display = 'none';
+        filePreview.style.display = 'none';
+    }
+}
+
+
 
         function copyCode() {
             const codeContainer = document.getElementById('codeDisplay');
@@ -280,15 +310,15 @@ namespace gubar
             selection.removeAllRanges();
         }
 
-        function downloadFile() {
-            const selectedVersion = document.getElementById('codeSelector').value;
-            const content = codeVersions[selectedVersion];
-            const blob = new Blob([content], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${selectedVersion}.txt`;
-            link.click();
-        }
+function downloadFile(fileName) {
+    const file = codeVersions.version4.find(f => f.name === fileName);
+    const blob = new Blob([file.content], { type: 'application/octet-stream' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+}
+
 
         function previewFile() {
             const file = document.getElementById('fileInput').files[0];
