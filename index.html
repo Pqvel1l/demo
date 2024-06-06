@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Versions</title>
+    <title>try 50/50 :D</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,33 +25,212 @@
 <body>
     <h1>Switch Between Code Versions</h1>
     <select id="codeSelector" onchange="switchCode()">
-        <option value="version1">Version 1</option>
-        <option value="version2">Version 2</option>
+        <option value="version1">LoginForm</option>
+        <option value="version2">RegisterForm</option>
+        <option value="version3">Word?</option>
+        <option value="version4">Word?</option>
         <!-- Add more options as needed -->
     </select>
 
     <div id="codeDisplay" class="code-container"></div>
+    <img id="codeImage" src="image1.jpg" alt="Code Image" style="display: block; margin-top: 20px;">
+
 
     <script>
         const codeVersions = {
             version1: `
-var loginForm = new Form1();
-loginForm.textBox1.Text = "login1"; // Тестовое значение для входа
-loginForm.textBox2.Text = "pass1"; // Тестовое значение для входа
-loginForm.button1Click(null, null); //"Нажатие" на кнопку
-Assert.IsFalse(loginForm.Visible);`,
+using System;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+
+namespace gubar
+{
+    public partial class LoginForm : Form
+    {
+
+        public LoginForm()
+        {
+            InitializeComponent();
+        }
+        public void button2Click(object sender, EventArgs e)
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=TEXPY\SQLEXPRESS;Initial Catalog=demo;Integrated Security=True;");
+            conn.Open();
+
+            string query = "SELECT * FROM users WHERE login=@Login AND password=@Password";
+
+            try
+            {
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@Login", text_Login.Text);
+                command.Parameters.AddWithValue("@Password", text_Pass.Text);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        string role = reader["type"].ToString();
+
+                        Form formx;
+                        switch (role)
+                        {
+                            case "Менеджер":
+                                formx = new ManagerForm();
+                                break;
+                            case "Мастер":
+                                formx = new MasterForm();
+                                break;
+                            case "Оператор":
+                                formx = new OperatorForm();
+                                break;
+                            case "Заказчик":
+                                formx = new CustomerForm();
+                                break;
+                            default:
+                                MessageBox.Show("Неизвестная должность.");
+                                return;
+                        }
+
+                        FormManager.ShowForm(formx);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Неверный логин или пароль.");
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Ошибка:" + error.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        private void toRegisterButton_Click(object sender, EventArgs e)
+        {
+            RegisterForm form = new RegisterForm();
+            form.Show();
+            this.Hide(); 
+        }
+    }
+}
+`,
             version2: `
-var loginForm = new Form1();
-loginForm.textBox1.Text = "login2"; // Другое тестовое значение для входа
-loginForm.textBox2.Text = "pass2"; // Другое тестовое значение для входа
-loginForm.button1Click(null, null); //"Нажатие" на кнопку
-Assert.IsTrue(loginForm.Visible);`
+
+Не забывайте, что необходимо иметь все необходимые текстовые поля с верными названиями в свойства - разработка - (name)
+В том пункте вам нужно будет поменять имя текстового поля как указаны они здесь.
+
+# ЕСЛИ ВЫ НЕ ЗНАЕТЕ ЧТО ДЕЛАЕТЕ - ВЫЙДИТЕ НАХУЙ ОТСЮДА!!!
+            
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace gubar
+{
+    public partial class RegisterForm : Form
+    {
+        public RegisterForm()
+        {
+            InitializeComponent();
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            string fio = text_fio.Text;
+            string phone = text_phone.Text;
+            string login = text_login.Text;
+            string password = text_password.Text;
+
+            if (string.IsNullOrWhiteSpace(fio) || string.IsNullOrWhiteSpace(phone) ||
+                string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Все поля должны быть заполнены.");
+                return;
+            }
+
+            string connectionString = @"Data Source=TEXPY\SQLEXPRESS;Initial Catalog=demo;Integrated Security=True;";
+            string query = "INSERT INTO users (fio, phone, login, password, type) VALUES (@Fio, @Phone, @Login, @Password, 'Заказчик')";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, conn);
+                command.Parameters.AddWithValue("@Fio", fio);
+                command.Parameters.AddWithValue("@Phone", phone);
+                command.Parameters.AddWithValue("@Login", login);
+                command.Parameters.AddWithValue("@Password", password);
+
+                try
+                {
+                    conn.Open();
+                    int result = command.ExecuteNonQuery();
+
+                    if (result > 0)
+                    {
+                        MessageBox.Show("Регистрация прошла успешно.");
+
+                        // Скрыть текущую форму регистрации
+                        this.Hide();
+
+                        // Открыть форму входа
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.ShowDialog();
+
+                        // Закрыть форму регистрации после завершения формы входа
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ошибка регистрации. Попробуйте еще раз.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка при подключении к базе данных: " + ex.Message);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            LoginForm loginForm = new LoginForm();
+            loginForm.ShowDialog();
+            this.Close();
+        }
+
+        private void RegisterForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+    }
+}
+`,version3:`Example`,version4:`example`
             // Add more versions as needed
+        };
+
+        const codeImages = {
+            version1: 'LoginForm.png',
+            version2: 'RegisterForm.png'
+            // Add more images as needed
         };
 
         function switchCode() {
             const selectedVersion = document.getElementById('codeSelector').value;
             document.getElementById('codeDisplay').innerText = codeVersions[selectedVersion];
+            document.getElementById('codeImage').src = codeImages[selectedVersion];
         }
 
         // Initialize with the first version
