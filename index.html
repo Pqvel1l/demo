@@ -9,7 +9,7 @@
         }
         .code-container {
             background-color: #2d2d2d;
-            color: #2d2d2d;
+            color: #2d2d2d; /* Same as background color */
             padding: 10px;
             border-radius: 5px;
             margin-top: 20px;
@@ -18,13 +18,12 @@
             position: relative;
         }
         .copy-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #FFFFFF;
-            border: none;
-            color: #FFFFFF;
+            margin-top: 10px;
+            background-color: #2d2d2d;
+            border: 1px solid #f8f8f2;
+            color: #f8f8f2;
             cursor: pointer;
+            padding: 5px 10px;
         }
         select {
             margin-top: 20px;
@@ -39,9 +38,8 @@
         <option value="version4">Word?</option>
     </select>
     <img id="codeImage" src="image1.jpg" alt="Code Image" style="display: block; margin-top: 20px;">
-    <div id="codeDisplay" class="code-container">
-        <button class="copy-button" onclick="copyCode()">Copy All</button>
-    </div>
+    <button class="copy-button" onclick="copyCode()">Copy All</button>
+    <div id="codeDisplay" class="code-container"></div>
 
     <script>
         const codeVersions = {
@@ -180,14 +178,11 @@ namespace gubar
                     {
                         MessageBox.Show("Регистрация прошла успешно.");
 
-                        // Скрыть текущую форму регистрации
                         this.Hide();
 
-                        // Открыть форму входа
                         LoginForm loginForm = new LoginForm();
                         loginForm.ShowDialog();
 
-                        // Закрыть форму регистрации после завершения формы входа
                         this.Close();
                     }
                     else
