@@ -9,7 +9,7 @@
         }
         .code-container {
             background-color: #2d2d2d;
-            color: #2d2d2d; /* Same as background color */
+            color: #2d2d2d;
             padding: 10px;
             border-radius: 5px;
             margin-top: 20px;
@@ -21,7 +21,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: transparent;
+            background-color: #2d2d2d;
             border: none;
             color: #f8f8f2;
             cursor: pointer;
@@ -37,7 +37,6 @@
         <option value="version2">RegisterForm</option>
         <option value="version3">Word?</option>
         <option value="version4">Word?</option>
-        <!-- Add more options as needed -->
     </select>
     <img id="codeImage" src="image1.jpg" alt="Code Image" style="display: block; margin-top: 20px;">
     <div id="codeDisplay" class="code-container">
@@ -47,7 +46,6 @@
     <script>
         const codeVersions = {
             version1: `
-
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -56,7 +54,6 @@ namespace gubar
 {
     public partial class LoginForm : Form
     {
-
         public LoginForm()
         {
             InitializeComponent();
@@ -129,7 +126,6 @@ namespace gubar
 }
 `,
             version2: `
-         
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -222,15 +218,13 @@ namespace gubar
     }
 }
 `,
-            version3:`Example`,
-            version4:`example`
-            // Add more versions as needed
+            version3: `Example`,
+            version4: `example`
         };
 
         const codeImages = {
             version1: 'LoginForm.png',
             version2: 'RegisterForm.png'
-            // Add more images as needed
         };
 
         function switchCode() {
@@ -257,7 +251,6 @@ namespace gubar
             selection.removeAllRanges();
         }
 
-        // Initialize with the first version
         switchCode();
     </script>
 </body>
